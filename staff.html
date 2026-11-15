@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nhân viên Order | BlueIsland Coffee</title>
+  <meta name="description" content="Khu vực nhân viên BlueIsland Coffee: nhận order, theo dõi pha chế và lịch sử ca." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0369A1" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Grandstander:wght@700;800&family=Patrick+Hand&family=Playfair+Display:ital,wght@1,500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deep: '#0C4A6E',     // Deep Sea – headings, footer
+            ocean: '#0369A1',    // Ocean Blue – primary / CTA
+            lagoon: '#06B6D4',   // Lagoon – accents, waves
+            shallow: '#E0F2FE',  // Shallow Water – badges, icon bg
+            foam: '#F0F9FF',     // Sea Foam – alt section bg
+            ink: '#0F172A',      // Body text
+            mist: '#E2E8F0',     // Borders
+          },
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', '"Noto Sans"', 'sans-serif'],
+            accent: ['"Playfair Display"', 'serif'],
+            logo: ['"Grandstander"', '"Patrick Hand"', 'cursive'],
+          },
+          boxShadow: {
+            sea: '0 10px 30px -10px rgba(3,105,161,0.25)',
+            'sea-lg': '0 20px 45px -15px rgba(3,105,161,0.35)',
+          },
+          maxWidth: { container: '72rem' },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body class="bg-foam font-sans text-ink antialiased">
+
+  <!-- ===================== ỨNG DỤNG POS (Dành cho nhân viên đã đăng nhập) ===================== -->
+  <div id="posApp" class="min-h-screen">
+    <!-- Topbar -->
+    <header id="posTopbar" class="sticky top-0 z-40 border-b border-mist bg-white">
+      <div class="mx-auto flex max-w-[1440px] items-center justify-between gap-3 px-4 py-2 lg:px-6">
+        <a href="index.html" class="flex min-h-[44px] items-center gap-2 cursor-pointer" aria-label="BlueIsland – về trang chủ">
+          <img src="assets/images/logo.png" alt="" class="h-10 w-auto object-contain" />
+          <span class="hidden origin-left scale-y-110 font-logo text-lg font-extrabold uppercase tracking-wider text-[#142274] sm:inline-block">
+            BLUE <span class="text-[#E63946]">ISLAND</span></span>
+        </a>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div class="hidden items-center gap-2 rounded-full bg-foam px-3 py-2 text-sm font-semibold text-deep tabular-nums sm:flex"
+            aria-label="Giờ hiện tại">
+            <i data-lucide="clock" class="h-4 w-4 text-ocean"></i>
+            <span id="clockText">--:--:--</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="staffAvatar" class="avatar !h-10 !w-10 text-sm" aria-hidden="true">NV</span>
+            <div class="hidden leading-tight md:block">
+              <p id="staffName" class="text-sm font-bold text-deep"></p>
+              <p id="staffShift" class="text-xs text-slate-600"></p>
+            </div>
+          </div>
+          <button type="button" id="endShiftBtn" class="pos-btn-ghost" aria-label="Kết ca và đăng xuất">
+            <i data-lucide="log-out" class="h-4 w-4"></i><span class="hidden sm:inline">Kết ca</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="mx-auto max-w-[1440px] px-4 pb-2 lg:px-6" aria-label="Chức năng nhân viên">
+        <div class="no-scrollbar flex gap-2 overflow-x-auto" role="tablist" id="posTabs">
+          <button type="button" role="tab" id="tabOrder" class="menu-tab inline-flex shrink-0 items-center gap-2 whitespace-nowrap"
+            data-tab="order" aria-selected="true" aria-controls="panelOrder">
+            <i data-lucide="plus" class="h-4 w-4"></i> Order mới
+          </button>
+          <button type="button" role="tab" id="tabQueue" class="menu-tab inline-flex shrink-0 items-center gap-2 whitespace-nowrap"
+            data-tab="queue" aria-selected="false" aria-controls="panelQueue" tabindex="-1">
+            <i data-lucide="clipboard-list" class="h-4 w-4"></i>
+            <span class="sm:hidden">Đang xử lý</span><span class="hidden sm:inline">Đơn đang xử lý</span>
+            <span id="queueBadge" class="pos-badge" hidden>0</span>
+          </button>
+          <button type="button" role="tab" id="tabHistory" class="menu-tab inline-flex shrink-0 items-center gap-2 whitespace-nowrap"
+            data-tab="history" aria-selected="false" aria-controls="panelHistory" tabindex="-1">
+            <i data-lucide="history" class="h-4 w-4"></i> Lịch sử ca
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-[1440px] px-4 py-4 lg:px-6 lg:py-6">
+
+      <!-- ===== Tab: Order mới ===== -->
+      <section id="panelOrder" role="tabpanel" aria-labelledby="tabOrder">
+        <div class="grid gap-6 lg:grid-cols-3">
+          <!-- Cột trái: Menu -->
+          <div class="min-w-0 pb-24 lg:col-span-2 lg:pb-0">
+            <div class="relative">
+              <label for="menuSearch" class="sr-only">Tìm món</label>
+              <i data-lucide="search" class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500"></i>
+              <input type="search" id="menuSearch" class="pos-input !rounded-full !bg-white !pl-12 !pr-14"
+                placeholder="Tìm món (VD: ca phe, tra vai...)" autocomplete="off" spellcheck="false" />
+              <kbd class="pointer-events-none absolute right-4 top-1/2 hidden -translate-y-1/2 rounded-md border border-mist bg-foam px-2 py-0.5 text-xs font-semibold text-slate-600 sm:block"
+                aria-hidden="true">/</kbd>
+            </div>
+
+            <div id="catTabs" class="no-scrollbar mt-4 flex gap-2 overflow-x-auto pb-1" role="tablist"
+              aria-label="Danh mục đồ uống"></div>
+
+            <p id="menuEmpty" class="mt-10 hidden text-center text-slate-600">Không tìm thấy món phù hợp.</p>
+            <div id="menuGrid" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4" aria-label="Danh sách món"></div>
+          </div>
+
+          <!-- Cột phải: Đơn hàng hiện tại (desktop: cột phải · <1024px: bottom sheet) -->
+          <aside id="cartPanel" class="pos-cart" aria-labelledby="cartTitle">
+            <div class="p-4 sm:p-5">
+              <div class="flex items-center justify-between gap-3">
+                <h2 id="cartTitle" class="text-lg font-extrabold text-deep">
+                  Đơn hàng <span id="cartCount" class="ml-1 text-sm font-semibold text-slate-600"></span>
+                </h2>
+                <button type="button" id="cartClose" class="pos-icon-btn pos-cart-close" aria-label="Đóng đơn hàng">
+                  <i data-lucide="chevron-down" class="h-5 w-5"></i>
+                </button>
+              </div>
+
+              <!-- Hình thức -->
+              <div class="pos-seg mt-4" role="group" aria-label="Hình thức phục vụ" id="typeSeg">
+                <button type="button" data-type="dine-in" aria-pressed="true"><i data-lucide="utensils" class="h-4 w-4"></i> Tại chỗ</button>
+                <button type="button" data-type="takeaway" aria-pressed="false"><i data-lucide="shopping-bag" class="h-4 w-4"></i> Mang đi</button>
+              </div>
+
+              <div id="dineInFields" class="mt-4">
+                <p class="pos-label" id="tableLabel">Số bàn</p>
+                <div id="tableGrid" class="grid grid-cols-5 gap-1.5" role="group" aria-labelledby="tableLabel"></div>
+              </div>
+              <div class="mt-3">
+                <label class="pos-label" for="customerName" id="customerLabel">Hoặc tên khách</label>
+                <input type="text" id="customerName" class="pos-input" placeholder="VD: Anh Tuấn" maxlength="40" autocomplete="off" />
+              </div>
+
+              <!-- Danh sách món -->
+              <ul id="cartLines" class="mt-4 border-t border-mist" aria-label="Món trong đơn"></ul>
+
+              <!-- Ưu đãi sinh viên -->
+              <div class="mt-4 rounded-2xl border border-mist bg-foam p-3">
+                <label class="pos-label flex items-center gap-1.5" for="studentId">
+                  <i data-lucide="badge-percent" class="h-4 w-4 text-[#E63946]"></i> Ưu đãi sinh viên 10%
+                </label>
+                <input type="text" id="studentId" class="pos-input !bg-white uppercase" placeholder="Mã SV, VD: A51008" maxlength="6"
+                  autocomplete="off" spellcheck="false" aria-describedby="studentHint" />
+                <p id="studentHint" class="mt-1.5 text-xs text-slate-600" aria-live="polite"></p>
+              </div>
+
+              <!-- Tổng kết -->
+              <dl id="cartTotals" class="mt-4 space-y-1.5 text-sm"></dl>
+
+              <!-- Thanh toán -->
+              <div class="mt-4">
+                <p class="pos-label">Thanh toán</p>
+                <div class="pos-seg" role="group" aria-label="Phương thức thanh toán" id="paySeg">
+                  <button type="button" data-pay="cash" aria-pressed="true"><i data-lucide="banknote" class="h-4 w-4"></i> Tiền mặt</button>
+                  <button type="button" data-pay="transfer" aria-pressed="false"><i data-lucide="qr-code" class="h-4 w-4"></i> Chuyển khoản</button>
+                </div>
+
+                <div id="cashBox" class="mt-3">
+                  <label class="pos-label" for="cashReceived">Tiền khách đưa</label>
+                  <input type="text" id="cashReceived" class="pos-input text-right text-lg font-bold tabular-nums" inputmode="numeric"
+                    placeholder="0" autocomplete="off" aria-describedby="cashChange" />
+                  <div id="quickCash" class="mt-2 grid grid-cols-3 gap-1.5"></div>
+                  <p id="cashChange" class="mt-3 text-sm" aria-live="polite"></p>
+                </div>
+
+                <div id="transferBox" class="mt-3 hidden text-center"></div>
+              </div>
+
+              <!-- Hành động -->
+              <div class="mt-5 space-y-2">
+                <button type="button" id="submitOrder" class="btn-primary pos-submit w-full justify-center !py-3 text-base"
+                  aria-describedby="submitHint" disabled>
+                  <i data-lucide="send" class="h-5 w-5"></i> Gửi pha chế
+                </button>
+                <p id="submitHint" class="text-center text-xs text-slate-600"></p>
+                <button type="button" id="cancelOrder" class="pos-btn-danger w-full justify-center" disabled>
+                  <i data-lucide="x" class="h-4 w-4"></i> Huỷ đơn
+                </button>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <div id="cartOverlay" class="pos-cart-overlay lg:hidden" aria-hidden="true"></div>
+        <button type="button" id="cartBar" class="pos-cart-bar lg:hidden" aria-controls="cartPanel" aria-expanded="false">
+          <span class="flex items-center gap-2"><i data-lucide="receipt" class="h-5 w-5"></i> <span id="cartBarText">Xem đơn (0 món · 0đ)</span></span>
+          <i data-lucide="chevron-up" class="h-5 w-5"></i>
+        </button>
+      </section>
+
+      <!-- ===== Tab: Đơn đang xử lý ===== -->
+      <section id="panelQueue" role="tabpanel" aria-labelledby="tabQueue" hidden>
+        <div class="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 class="text-xl font-extrabold text-deep">Đơn đang xử lý</h2>
+            <p class="text-sm text-slate-600">Đơn chờ quá 10 phút sẽ được viền đỏ để ưu tiên.</p>
+          </div>
+        </div>
+        <div id="queueSubTabs" class="mt-4 flex gap-2 md:hidden" role="tablist" aria-label="Trạng thái đơn"></div>
+        <div id="queueBoard" class="mt-4 grid gap-4 md:grid-cols-3"></div>
+      </section>
+
+      <!-- ===== Tab: Lịch sử ca ===== -->
+      <section id="panelHistory" role="tabpanel" aria-labelledby="tabHistory" hidden>
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 class="text-xl font-extrabold text-deep">Lịch sử ca</h2>
+            <p id="historyShiftInfo" class="text-sm text-slate-600"></p>
+          </div>
+          <button type="button" id="endShiftBtn2" class="pos-btn-ghost self-start sm:self-auto">
+            <i data-lucide="log-out" class="h-4 w-4"></i> Kết ca
+          </button>
+        </div>
+
+        <div id="shiftStats" class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-4"></div>
+
+        <div class="mt-6 overflow-hidden rounded-2xl border border-mist bg-white shadow-sea">
+          <div class="overflow-x-auto">
+            <table class="pos-table">
+              <caption class="sr-only">Danh sách đơn trong ca hiện tại</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Mã đơn</th>
+                  <th scope="col">Giờ</th>
+                  <th scope="col">Bàn</th>
+                  <th scope="col" class="!text-right">Số món</th>
+                  <th scope="col" class="!text-right">Tổng</th>
+                  <th scope="col">Thanh toán</th>
+                  <th scope="col">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+          <p id="historyEmpty" class="hidden px-4 py-10 text-center text-slate-600">Chưa có đơn nào trong ca này.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===================== DIALOGS ===================== -->
+  <!-- Tuỳ chọn món -->
+  <dialog id="optionModal"
+    class="auth-modal w-[calc(100%-2rem)] max-w-md rounded-3xl bg-white p-0 shadow-sea-lg backdrop:bg-deep/70 backdrop:backdrop-blur-sm"
+    aria-labelledby="optionTitle">
+    <div id="optionBody" class="max-h-[88vh] overflow-y-auto p-5 sm:p-6"></div>
+  </dialog>
+
+  <!-- Xác nhận dùng chung (thay cho confirm()) -->
+  <dialog id="confirmModal"
+    class="auth-modal w-[calc(100%-2rem)] max-w-md rounded-3xl bg-white p-0 shadow-sea-lg backdrop:bg-deep/70 backdrop:backdrop-blur-sm"
+    aria-labelledby="confirmTitle">
+    <form method="dialog" class="max-h-[88vh] overflow-y-auto p-5 sm:p-6">
+      <h3 id="confirmTitle" class="text-lg font-extrabold text-deep"></h3>
+      <div id="confirmMessage" class="mt-2 text-sm text-slate-600"></div>
+      <div class="mt-6 flex flex-col-reverse gap-2 sm:flex-row">
+        <button type="submit" value="cancel" id="confirmCancel" class="pos-btn-ghost flex-1 justify-center">Quay lại</button>
+        <button type="submit" value="ok" id="confirmOk" class="btn-primary flex-1 justify-center">Xác nhận</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Chi tiết đơn -->
+  <dialog id="orderModal"
+    class="auth-modal w-[calc(100%-2rem)] max-w-md rounded-3xl bg-white p-0 shadow-sea-lg backdrop:bg-deep/70 backdrop:backdrop-blur-sm"
+    aria-labelledby="orderModalTitle">
+    <div id="orderModalBody" class="max-h-[88vh] overflow-y-auto p-5 sm:p-6"></div>
+  </dialog>
+
+  <!-- Toast + thông báo cho trình đọc màn hình -->
+  <div id="toastRegion" class="pos-toast-region" aria-live="polite" aria-atomic="false"></div>
+  <p id="srLive" class="sr-only" aria-live="polite"></p>
+
+  <!-- Vùng in hoá đơn 80mm (chỉ hiện khi in) -->
+  <div id="printArea" class="pos-print-area" aria-hidden="true"></div>
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="assets/js/menu-data.js"></script>
+  <script src="assets/js/staff.js"></script>
+</body>
+
+</html>
+

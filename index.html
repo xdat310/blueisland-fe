@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BlueIsland Coffee | Một hòn đảo nhỏ giữa lòng "Thăng Long"</title>
+  <meta name="description"
+    content="BlueIsland Coffee: không gian cà phê thoáng mát phong cách biển đảo, wifi mạnh, ổ cắm mọi bàn. Lý tưởng cho sinh viên và dân văn phòng." />
+  <meta name="theme-color" content="#0369A1" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Grandstander:wght@700;800&family=Patrick+Hand&family=Playfair+Display:ital,wght@1,500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deep: '#0C4A6E',     // Deep Sea – headings, footer
+            ocean: '#0369A1',    // Ocean Blue – primary / CTA
+            lagoon: '#06B6D4',   // Lagoon – accents, waves
+            shallow: '#E0F2FE',  // Shallow Water – badges, icon bg
+            foam: '#F0F9FF',     // Sea Foam – alt section bg
+            ink: '#0F172A',      // Body text
+            mist: '#E2E8F0',     // Borders
+          },
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', '"Noto Sans"', 'sans-serif'],
+            accent: ['"Playfair Display"', 'serif'],
+            logo: ['"Grandstander"', '"Patrick Hand"', 'cursive'],
+          },
+          boxShadow: {
+            sea: '0 10px 30px -10px rgba(3,105,161,0.25)',
+            'sea-lg': '0 20px 45px -15px rgba(3,105,161,0.35)',
+          },
+          maxWidth: { container: '72rem' },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body class="bg-white font-sans text-ink antialiased">
+  <a href="#main"
+    class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ocean focus:px-4 focus:py-2 focus:text-white">Bỏ
+    qua đến nội dung</a>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <header id="navbar" class="fixed inset-x-4 top-4 z-50 transition-all duration-300">
+    <nav
+      class="mx-auto flex max-w-container items-center justify-between rounded-full border border-white/40 bg-white/80 px-4 py-2.5 shadow-sea backdrop-blur-md sm:px-6"
+      aria-label="Điều hướng chính">
+      <a href="#hero" class="flex items-center gap-2.5 cursor-pointer" aria-label="BlueIsland – về đầu trang">
+        <img src="assets/images/logo.png" alt="BlueIsland Coffee Logo"
+          class="h-11 w-auto object-contain drop-shadow-sm" />
+        <span
+          class="font-logo text-2xl font-extrabold uppercase tracking-wider text-[#142274] inline-block origin-left scale-y-110">BLUE
+          <span class="text-[#E63946]">ISLAND</span></span>
+      </a>
+
+      <ul class="hidden items-center gap-1 lg:flex">
+        <li><a href="#about" class="nav-link">Giới thiệu</a></li>
+        <li><a href="#menu" class="nav-link">Menu</a></li>
+        <li><a href="#space" class="nav-link">Không gian</a></li>
+        <li><a href="#reviews" class="nav-link">Đánh giá</a></li>
+        <li><a href="#contact" class="nav-link">Liên hệ</a></li>
+      </ul>
+
+      <div class="flex items-center gap-2">
+        <!-- Auth Button Desktop -->
+        <div id="userNavDesktop" class="hidden sm:flex items-center">
+          <button type="button" id="authBtnDesktop"
+            class="btn-primary text-sm !px-4 !py-1.5 flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="user" class="h-4 w-4"></i> Đăng nhập
+          </button>
+        </div>
+
+        <button id="menuToggle" type="button"
+          class="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-deep transition-colors duration-200 hover:bg-shallow lg:hidden"
+          aria-label="Mở menu" aria-expanded="false" aria-controls="mobileMenu">
+          <i data-lucide="menu" class="h-6 w-6"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu"
+      class="mx-auto mt-2 hidden max-w-container rounded-3xl border border-mist bg-white/95 p-4 shadow-sea-lg backdrop-blur-md lg:hidden">
+      <ul class="flex flex-col gap-1">
+        <li><a href="#about" class="mobile-link">Giới thiệu</a></li>
+        <li><a href="#menu" class="mobile-link">Menu</a></li>
+        <li><a href="#space" class="mobile-link">Không gian</a></li>
+        <li><a href="#reviews" class="mobile-link">Đánh giá</a></li>
+        <li><a href="#contact" class="mobile-link">Liên hệ</a></li>
+      </ul>
+      <div id="userNavMobile" class="mt-3 pt-3 border-t border-mist">
+        <button type="button" id="authBtnMobile" class="btn-primary w-full justify-center text-sm py-2">
+          <i data-lucide="user" class="h-4 w-4"></i> Đăng nhập / Đăng ký
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== 1. HERO ===================== -->
+    <section id="hero"
+      class="hero-parallax relative isolate flex min-h-[90svh] items-center overflow-hidden bg-deep pt-24 pb-24 text-white">
+      <!-- Soft gradient overlay so text is crisp while showing full shop architecture -->
+      <div class="absolute inset-0 bg-gradient-to-r from-deep/75 via-deep/35 to-transparent"></div>
+
+      <div class="relative z-10 mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-white/40 bg-deep/60 px-4 py-1.5 text-sm font-medium shadow-md backdrop-blur-md">
+            <i data-lucide="waves" class="h-4 w-4 text-lagoon"></i> BlueIsland Coffee &bull; Đại học Thăng Long
+          </span>
+          <h1
+            class="mt-6 text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-[1.05] tracking-tight drop-shadow-[0_4px_12px_rgba(12,74,110,0.85)]">
+            Ốc đảo xanh<br />giữa lòng Thăng Long
+          </h1>
+        </div>
+      </div>
+
+      <!-- Slim animated waves to reveal full courtyard ground -->
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10" aria-hidden="true">
+        <svg class="wave wave-back h-14 w-[200%] sm:h-18" viewBox="0 0 2880 120" preserveAspectRatio="none">
+          <path fill="#F0F9FF" fill-opacity="0.35"
+            d="M0 60 C240 110 480 10 720 60 S1200 110 1440 60 S1920 10 2160 60 S2640 110 2880 60 V120 H0Z" />
+        </svg>
+        <svg class="wave wave-front absolute bottom-0 h-10 w-[200%] sm:h-14" viewBox="0 0 2880 120"
+          preserveAspectRatio="none">
+          <path fill="#F0F9FF"
+            d="M0 70 C240 30 480 110 720 70 S1200 30 1440 70 S1920 110 2160 70 S2640 30 2880 70 V120 H0Z" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- ===================== 2. ABOUT ===================== -->
+    <section id="about" class="bg-foam py-20 sm:py-28">
+      <div class="mx-auto grid max-w-container items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div class="relative reveal">
+          <div class="img-frame aspect-[4/5] w-4/5 rounded-[2rem] shadow-sea-lg">
+            <img src="assets/images/about-space.jpg"
+              alt="Sinh viên trò chuyện tại khuôn viên quán BlueIsland Coffee Đại học Thăng Long" loading="lazy"
+              class="h-full w-full object-cover" />
+          </div>
+          <div
+            class="img-frame absolute -bottom-8 right-0 aspect-square w-1/2 rounded-[2rem] border-8 border-foam shadow-sea-lg">
+            <img src="assets/images/about-coffee.jpg?v=2"
+              alt="Công nghệ in logo Thang Long University lên ly latte tại BlueIsland Coffee" loading="lazy"
+              class="h-full w-full object-cover" />
+          </div>
+          <div class="absolute left-4 top-6 rounded-2xl bg-white/90 px-4 py-3 shadow-sea backdrop-blur sm:left-6">
+            <p class="text-2xl font-extrabold text-ocean">Từ 2025</p>
+            <p class="text-sm text-slate-600">đồng hành cùng bạn</p>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <p class="eyebrow">Về chúng tôi</p>
+          <h2 class="section-title">Nơi bạn ghé để học, làm việc và nghỉ ngơi</h2>
+          <p class="mt-5 text-lg leading-relaxed text-slate-600">
+            Giữa khuôn viên Trường Đại học Thăng Long, quán cafe Blue Island gây ấn tượng với phong cách Địa Trung Hải
+            cùng những góc ngồi thư giãn trong không gian vườn sinh viên cùng tiếng nhạc giao hưởng du dương. Lấy cảm
+            hứng từ “nắng và gió” của các quốc gia ven biển như Hy Lạp, Ý và Tây Ban Nha, Blue Island nổi bật với gam
+            trắng - xanh đặc trưng, mái vòm cong mềm mại, không gian mở ngập tràn ánh sáng tự nhiên cùng những chi tiết
+            mang đậm tinh thần nghỉ dưỡng.
+          </p>
+
+          <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+            <li class="feature-card">
+              <span class="icon-bubble"><i data-lucide="laptop" class="h-5 w-5"></i></span>
+              <div>
+                <h3 class="font-semibold text-deep">Góc học &amp; làm việc</h3>
+                <p class="mt-1 text-sm text-slate-600">Yên tĩnh, rộng rãi, thoáng đãng.</p>
+              </div>
+            </li>
+            <li class="feature-card">
+              <span class="icon-bubble"><i data-lucide="wallet" class="h-5 w-5"></i></span>
+              <div>
+                <h3 class="font-semibold text-deep">Giá thân thiện</h3>
+                <p class="mt-1 text-sm text-slate-600">Ưu đãi 10% cho sinh viên mỗi ngày.</p>
+              </div>
+            </li>
+            <li class="feature-card">
+              <span class="icon-bubble"><i data-lucide="coffee" class="h-5 w-5"></i></span>
+              <div>
+                <h3 class="font-semibold text-deep">Hạt cà phê chất lượng</h3>
+                <p class="mt-1 text-sm text-slate-600">Được chọn lọc kĩ càng từng hạt cà phê.</p>
+              </div>
+            </li>
+            <li class="feature-card">
+              <span class="icon-bubble"><i data-lucide="heart-handshake" class="h-5 w-5"></i></span>
+              <div>
+                <h3 class="font-semibold text-deep">Phục vụ tận tâm</h3>
+                <p class="mt-1 text-sm text-slate-600">Luôn vui vẻ, nhanh nhẹn, chu đáo, nhiệt tình.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 3. MENU (Từng ô món có hình ảnh chuẩn) ===================== -->
+    <section id="menu" class="bg-white py-20 sm:py-28">
+      <div class="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center reveal">
+          <p class="eyebrow">Menu đồ uống</p>
+          <h2 class="section-title">Thực đơn tại BlueIsland Coffee</h2>
+          <p class="mt-4 text-lg text-slate-600">Đầy đủ 23 món đồ uống với mức giá thân thiện cho sinh viên
+            và thầy cô.</p>
+        </div>
+
+        <!-- Các Tab lọc danh mục -->
+        <div class="mt-10 flex flex-wrap justify-center gap-2 reveal" role="tablist" aria-label="Danh mục đồ uống"
+          id="menuTabs">
+          <button type="button" role="tab" class="menu-tab" data-cat="all" aria-selected="true">Tất cả (23)</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="special" aria-selected="false">Đặc biệt</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="espresso" aria-selected="false">Café máy</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="coffee" aria-selected="false">Café</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="tea" aria-selected="false">Trà</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="ice" aria-selected="false">Đá xay</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="juice" aria-selected="false">Sinh tố, Nước
+            ép</button>
+          <button type="button" role="tab" class="menu-tab" data-cat="other" aria-selected="false">Đồ uống khác</button>
+        </div>
+
+        <!-- Lưới hiển thị từng ô món kèm hình ảnh (Tối đa 2 hàng x 4 món = 8 món/trang) -->
+        <div id="menuGrid" role="tabpanel" aria-live="polite" class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        </div>
+
+        <!-- Điều hướng phân trang Menu (Prev / Next) -->
+        <div id="menuPagination" class="mt-8 flex items-center justify-center gap-3" aria-label="Phân trang thực đơn">
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 4. SPACE ===================== -->
+    <section id="space" class="relative bg-foam py-20 sm:py-28">
+      <div class="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end reveal">
+          <div class="max-w-xl">
+            <p class="eyebrow">Không gian quán</p>
+            <h2 class="section-title">Mỗi góc nhỏ là một bãi biển riêng</h2>
+          </div>
+          <p class="max-w-md text-slate-600">Không gian sân vườn thoáng mát với nhiều góc ngồi đa dạng, phù hợp học
+            nhóm, làm việc hay trò chuyện cùng bạn bè.</p>
+        </div>
+
+        <div class="mt-12 grid auto-rows-[200px] grid-cols-2 gap-4 md:auto-rows-[220px] md:grid-cols-4 reveal"
+          id="gallery">
+          <!-- 1. Góc học nhóm -->
+          <button type="button" class="gallery-item col-span-2 row-span-2 md:col-span-2 md:row-span-2"
+            data-caption="Góc học nhóm: bàn tròn ngoài trời thoáng đãng, lý tưởng để cùng nhau ôn bài">
+            <img src="assets/images/gallery-study.jpg" alt="Góc học bài nhóm của sinh viên BlueIsland" loading="lazy" />
+            <span class="gallery-caption">Góc học nhóm</span>
+          </button>
+
+          <!-- 2. Góc làm việc -->
+          <button type="button" class="gallery-item col-span-1 md:col-span-1"
+            data-caption="Góc làm việc: bàn đơn yên tĩnh, wifi mạnh, lý tưởng để tập trung chạy deadline">
+            <img src="assets/images/gallery-work.jpg" alt="Góc làm việc cá nhân với laptop" loading="lazy" />
+            <span class="gallery-caption">Góc làm việc</span>
+          </button>
+
+          <!-- 3. Quầy bar -->
+          <button type="button" class="gallery-item col-span-1 md:col-span-1"
+            data-caption="Quầy bar: ô cửa sổ vòm mái xanh Santorini đặc trưng tại khuôn viên trường">
+            <img src="assets/images/gallery-bar.jpg?v=2" alt="Quầy bar cửa sổ vòm mái xanh phong cách Santorini"
+              loading="lazy" />
+            <span class="gallery-caption">Quầy bar</span>
+          </button>
+
+          <!-- 4. Góc trò chuyện -->
+          <button type="button" class="gallery-item col-span-1 md:col-span-1"
+            data-caption="Góc trò chuyện: chỗ ngồi thư giãn dưới bóng cây râm mát, thoải mái gặp gỡ bạn bè">
+            <img src="assets/images/gallery-sofa.jpg" alt="Góc trò chuyện nhóm dưới bóng cây" loading="lazy" />
+            <span class="gallery-caption">Góc trò chuyện</span>
+          </button>
+
+          <!-- 5. Pha thủ công -->
+          <button type="button" class="gallery-item col-span-1 md:col-span-1"
+            data-caption="Pha thủ công: cà phê pha máy chuyên nghiệp từ barista tận tâm">
+            <img src="assets/images/gallery-craft.jpg" alt="Pha chế cà phê chuyên nghiệp tại BlueIsland"
+              loading="lazy" />
+            <span class="gallery-caption">Pha thủ công</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <dialog id="lightbox" class="lightbox" aria-label="Xem ảnh không gian">
+      <figure class="relative">
+        <img id="lightboxImg" src="" alt="" class="max-h-[78vh] w-auto rounded-2xl object-contain" />
+        <figcaption id="lightboxCaption" class="mt-4 text-center text-white"></figcaption>
+        <button type="button" id="lightboxPrev" class="lightbox-btn left-2" aria-label="Ảnh trước"><i
+            data-lucide="chevron-left" class="h-6 w-6"></i></button>
+        <button type="button" id="lightboxNext" class="lightbox-btn right-2" aria-label="Ảnh sau"><i
+            data-lucide="chevron-right" class="h-6 w-6"></i></button>
+      </figure>
+      <button type="button" id="lightboxClose"
+        class="absolute right-4 top-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-white/15 text-white transition-colors duration-200 hover:bg-white/30"
+        aria-label="Đóng"><i data-lucide="x" class="h-6 w-6"></i></button>
+    </dialog>
+
+    <!-- ===================== 5. REVIEWS (Tài khoản sinh viên) ===================== -->
+    <section id="reviews" class="bg-white py-20 sm:py-28">
+      <div class="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center reveal">
+          <p class="eyebrow">Đánh giá khách hàng</p>
+          <h2 class="section-title">Cảm nhận từ sinh viên Thăng Long</h2>
+          <p class="mt-4 text-slate-600">Đánh giá thực tế từ các bạn sinh viên và giảng viên tại khuôn viên trường.</p>
+        </div>
+
+        <!-- Khung hành động đánh giá (Đăng nhập / Viết review) -->
+        <div id="reviewActionCard"
+          class="mx-auto mt-10 max-w-2xl rounded-3xl border border-mist bg-foam p-6 sm:p-8 shadow-sea transition-all reveal">
+          <!-- Trạng thái 1: Chưa đăng nhập -->
+          <div id="reviewLoginPrompt" class="text-center py-4">
+            <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-shallow text-ocean mb-3">
+              <i data-lucide="message-square-plus" class="h-6 w-6"></i>
+            </span>
+            <h3 class="text-lg font-bold text-deep">Bạn đã trải nghiệm tại BlueIsland?</h3>
+            <p class="mt-2 text-sm text-slate-600 max-w-md mx-auto">Đăng nhập bằng tài khoản sinh viên Thăng Long để
+              chia sẻ đánh giá thật và đóng góp ý kiến cho quán nhé!</p>
+            <button type="button" id="reviewPromptLoginBtn" class="btn-primary mt-5 text-sm">
+              <i data-lucide="log-in" class="h-4 w-4"></i> Đăng nhập để viết đánh giá
+            </button>
+          </div>
+
+          <!-- Trạng thái 2: Đã đăng nhập (Form viết đánh giá) -->
+          <form id="reviewForm" class="hidden space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-mist">
+              <div class="flex items-center gap-3">
+                <span id="reviewUserAvatar" class="avatar !w-10 !h-10 text-sm">SV</span>
+                <div>
+                  <p id="reviewUserName" class="font-bold text-deep text-sm">Sinh viên TLU</p>
+                  <p id="reviewUserSub" class="text-xs text-slate-600">Tài khoản sinh viên</p>
+                </div>
+              </div>
+              <span class="text-xs bg-shallow text-ocean font-semibold px-2.5 py-1 rounded-full">Đánh giá thật</span>
+            </div>
+
+            <!-- Chọn số sao -->
+            <div>
+              <label class="block text-sm font-semibold text-deep mb-1.5">Mức độ hài lòng:</label>
+              <div id="starRating" class="flex gap-1.5 text-slate-300" role="radiogroup" aria-label="Chọn số sao">
+                <button type="button" class="star-btn cursor-pointer transition-transform hover:scale-110"
+                  data-value="1" aria-label="1 sao"><i data-lucide="star" class="h-6 w-6 fill-current"></i></button>
+                <button type="button" class="star-btn cursor-pointer transition-transform hover:scale-110"
+                  data-value="2" aria-label="2 sao"><i data-lucide="star" class="h-6 w-6 fill-current"></i></button>
+                <button type="button" class="star-btn cursor-pointer transition-transform hover:scale-110"
+                  data-value="3" aria-label="3 sao"><i data-lucide="star" class="h-6 w-6 fill-current"></i></button>
+                <button type="button" class="star-btn cursor-pointer transition-transform hover:scale-110"
+                  data-value="4" aria-label="4 sao"><i data-lucide="star" class="h-6 w-6 fill-current"></i></button>
+                <button type="button" class="star-btn cursor-pointer transition-transform hover:scale-110"
+                  data-value="5" aria-label="5 sao"><i data-lucide="star" class="h-6 w-6 fill-current"></i></button>
+              </div>
+              <input type="hidden" id="ratingValue" value="5" />
+            </div>
+
+            <!-- Ô nhập nội dung -->
+            <div>
+              <label for="reviewComment" class="block text-sm font-semibold text-deep mb-1">Cảm nhận của bạn:</label>
+              <textarea id="reviewComment" rows="3" required
+                placeholder="Chia sẻ về đồ uống, không gian quán, wifi hoặc thái độ phục vụ..."
+                class="w-full rounded-2xl border border-mist bg-white p-3.5 text-sm text-ink focus:border-ocean focus:outline-none focus:ring-2 focus:ring-ocean/20 transition-all"></textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-xs text-slate-500">Đánh giá sẽ được hiển thị công khai trên website</span>
+              <button type="submit" class="btn-primary text-sm !py-2 !px-5">
+                <i data-lucide="send" class="h-4 w-4"></i> Gửi đánh giá
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Danh sách hiển thị đánh giá (Mặc định trống dữ liệu) -->
+        <div id="reviewsContainer" class="mt-12 max-w-4xl mx-auto">
+          <!-- Render tự động bởi main.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 6. CONTACT ===================== -->
+    <section id="contact" class="bg-foam py-20 sm:py-28">
+      <div class="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center reveal">
+          <p class="eyebrow">Ghé thăm chúng tôi</p>
+          <h2 class="section-title">Địa chỉ &amp; giờ mở cửa</h2>
+        </div>
+
+        <div class="mt-12 grid gap-6 lg:grid-cols-5 reveal">
+          <div class="overflow-hidden rounded-3xl border border-mist bg-shallow shadow-sea lg:col-span-3">
+            <iframe title="Bản đồ đến quán BlueIsland Coffee tại ĐH Thăng Long"
+              src="https://www.google.com/maps?q=Tr%C6%B0%E1%BB%9Dng+%C4%90%E1%BA%A1i+h%E1%BB%8Dc+Th%C4%83ng+Long+Nghi%C3%AAm+Xu%C3%A2n+Y%C3%AAm+H%C3%A0+N%E1%BB%99i&output=embed"
+              class="h-80 w-full lg:h-full lg:min-h-[460px]" style="border:0" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+
+          <div class="flex flex-col gap-6 rounded-3xl border border-mist bg-white p-6 shadow-sea sm:p-8 lg:col-span-2">
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-xl font-bold text-deep">BlueIsland Coffee</h3>
+              <span id="openStatus" class="status-pill">
+                <span class="status-dot"></span><span id="openStatusText">Đang kiểm tra…</span>
+              </span>
+            </div>
+
+            <ul class="space-y-4 text-slate-600">
+              <li class="flex gap-3"><i data-lucide="map-pin" class="mt-0.5 h-5 w-5 shrink-0 text-ocean"></i><span>Khuôn
+                  viên Trường ĐH Thăng Long, Đường Nghiêm Xuân Yêm, Đại Kim, Hoàng Mai, Hà Nội</span></li>
+              <li class="flex gap-3"><i data-lucide="phone" class="mt-0.5 h-5 w-5 shrink-0 text-ocean"></i><a
+                  href="tel:0901234567" class="cursor-pointer transition-colors duration-200 hover:text-ocean">0901 234
+                  567</a></li>
+              <li class="flex gap-3"><i data-lucide="mail" class="mt-0.5 h-5 w-5 shrink-0 text-ocean"></i><a
+                  href="mailto:hello@blueisland.vn"
+                  class="cursor-pointer transition-colors duration-200 hover:text-ocean">tlu@blueisland.vn</a></li>
+            </ul>
+
+            <div>
+              <h4 class="mb-3 flex items-center gap-2 font-semibold text-deep"><i data-lucide="clock"
+                  class="h-5 w-5 text-ocean"></i> Giờ mở cửa</h4>
+              <table class="w-full text-sm" id="hoursTable">
+                <caption class="sr-only">Giờ mở cửa trong tuần</caption>
+                <tbody>
+                  <tr data-days="1,2,3,4,5,6">
+                    <th scope="row" class="hours-day">Thứ 2 – Thứ 7</th>
+                    <td class="hours-time">07:00 – 21:30</td>
+                  </tr>
+                  <tr data-days="0">
+                    <th scope="row" class="hours-day">Chủ nhật</th>
+                    <td class="hours-time">08:00 – 21:00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <a href="https://www.google.com/maps/dir/?api=1&destination=Tr%C6%B0%E1%BB%9Dng+%C4%90%E1%BA%A1i+h%E1%BB%8Dc+Th%C4%83ng+Long+Nghi%C3%AAm+Xu%C3%A2n+Y%C3%AAm+H%C3%A0+N%E1%BB%99i"
+              target="_blank" rel="noopener" class="btn-primary mt-auto w-full justify-center">
+              <i data-lucide="navigation" class="h-4 w-4"></i> Chỉ đường đến trường
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== 7. FOOTER ===================== -->
+  <footer class="relative bg-[#D6EEFF] text-slate-600">
+    <svg class="absolute -top-px left-0 h-12 w-full sm:h-16" viewBox="0 0 1440 80" preserveAspectRatio="none"
+      aria-hidden="true">
+      <path fill="#F0F9FF" d="M0 0 H1440 V30 C1200 80 960 0 720 30 S240 80 0 30Z" />
+    </svg>
+    <div
+      class="mx-auto flex max-w-container flex-col justify-between gap-10 px-4 pt-24 pb-12 sm:px-6 md:flex-row md:items-center lg:px-8">
+      <div class="max-w-md">
+        <a href="#hero" class="flex items-center gap-2.5 cursor-pointer" aria-label="BlueIsland – về đầu trang">
+          <img src="assets/images/logo.png" alt="BlueIsland Coffee Logo"
+            class="h-11 w-auto object-contain drop-shadow-sm" />
+          <span
+            class="font-logo text-2xl font-extrabold uppercase tracking-wider text-[#142274] inline-block origin-left scale-y-110">BLUE
+            <span class="text-[#E63946]">ISLAND</span></span>
+        </a>
+        <p class="mt-4 max-w-sm font-accent text-lg italic text-slate-600">Một hòn đảo nhỏ giữa lòng "Thăng Long".</p>
+        <div class="mt-6 flex gap-3">
+          <a href="#" class="social-btn" aria-label="Facebook BlueIsland">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram BlueIsland">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="TikTok BlueIsland">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor">
+              <path
+                d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="flex flex-col items-center gap-3 text-center">
+        <h3 class="font-bold text-slate-700 text-sm uppercase tracking-wider">Liên kết</h3>
+        <ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2.5 text-sm font-semibold text-slate-600">
+          <li><a href="#about" class="footer-link">Giới thiệu</a></li>
+          <li><a href="#menu" class="footer-link">Menu</a></li>
+          <li><a href="#space" class="footer-link">Không gian</a></li>
+          <li><a href="#reviews" class="footer-link">Đánh giá</a></li>
+          <li><a href="#contact" class="footer-link">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-slate-300/60">
+      <p class="mx-auto max-w-container px-4 py-6 text-center text-sm text-slate-500 sm:px-6 lg:px-8">© <span
+          id="year">2026</span> BlueIsland Coffee. Made with love by the sea.</p>
+    </div>
+  </footer>
+
+  <!-- ===================== AUTH MODAL (Đăng ký / Đăng nhập sinh viên) ===================== -->
+  <dialog id="authModal"
+    class="auth-modal rounded-3xl border border-mist bg-white p-6 sm:p-8 shadow-sea-lg backdrop:bg-deep/70 backdrop:backdrop-blur-sm max-w-md w-full"
+    aria-label="Đăng ký hoặc Đăng nhập">
+    <div class="relative">
+      <button type="button" id="authModalClose"
+        class="absolute -right-2 -top-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+        aria-label="Đóng">
+        <i data-lucide="x" class="h-5 w-5"></i>
+      </button>
+
+      <div class="text-center flex flex-col items-center">
+        <img src="assets/images/logo.png" alt="BlueIsland Coffee Logo"
+          class="h-14 w-auto object-contain drop-shadow-sm mb-2" />
+        <h3 class="font-logo text-2xl font-extrabold uppercase tracking-wider text-[#142274] scale-y-110">BLUE <span
+            class="text-[#E63946]">ISLAND</span></h3>
+        <p class="text-xs text-slate-600 mt-2">Dành riêng cho sinh viên &amp; giảng viên Thăng Long</p>
+      </div>
+
+      <!-- Auth Tabs Switcher -->
+      <div class="mt-6 flex rounded-xl bg-foam p-1 border border-mist" role="tablist">
+        <button type="button" id="tabLogin"
+          class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all auth-tab is-active"
+          aria-selected="true">Đăng nhập</button>
+        <button type="button" id="tabRegister"
+          class="flex-1 py-2 text-sm font-semibold rounded-lg transition-all auth-tab text-slate-600"
+          aria-selected="false">Đăng ký</button>
+      </div>
+
+      <!-- Form Đăng nhập -->
+      <form id="formLogin" class="mt-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-1.5" for="loginEmail">Tên đăng nhập / Email / Mã nhân viên</label>
+          <input type="text" id="loginEmail" required placeholder="Nhập tên đăng nhập, email hoặc mã NV"
+            class="w-full rounded-xl border border-mist bg-foam px-3.5 py-2.5 text-sm focus:border-ocean focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean/20 transition-all" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-1.5" for="loginPassword">Mật
+            khẩu</label>
+          <input type="password" id="loginPassword" required placeholder="********"
+            class="w-full rounded-xl border border-mist bg-foam px-3.5 py-2.5 text-sm focus:border-ocean focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean/20 transition-all" />
+        </div>
+        <p id="loginErrorMsg"
+          class="hidden rounded-xl bg-red-50 p-2.5 text-xs font-medium text-red-600 border border-red-200" role="alert">
+        </p>
+        <div class="flex items-center justify-between text-xs text-slate-600">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" id="loginRemember" class="rounded border-mist text-ocean focus:ring-ocean" checked />
+            Ghi nhớ
+          </label>
+          <a href="#" class="text-ocean hover:underline"
+            onclick="alert('Tính năng khôi phục mật khẩu sẽ kết nối khi hoàn tất Backend!'); return false;">Quên mật
+            khẩu?</a>
+        </div>
+        <button type="submit" class="btn-primary w-full justify-center mt-2 py-2.5">
+          <i data-lucide="log-in" class="h-4 w-4"></i> Đăng nhập ngay
+        </button>
+        <p class="text-center text-xs text-slate-500 mt-3">Chưa có tài khoản? <button type="button"
+            id="switchToRegister" class="text-ocean font-bold underline cursor-pointer">Đăng ký ngay</button></p>
+      </form>
+
+      <!-- Form Đăng ký -->
+      <form id="formRegister" class="mt-6 space-y-3 hidden">
+        <div>
+          <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-1.5" for="regName">Họ và
+            tên</label>
+          <input type="text" id="regName" required placeholder="Nguyễn Văn A"
+            class="w-full rounded-xl border border-mist bg-foam px-3.5 py-2.5 text-sm focus:border-ocean focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean/20 transition-all" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-1.5" for="regEmail">Email</label>
+          <input type="email" id="regEmail" required placeholder="abc@gmail.com"
+            class="w-full rounded-xl border border-mist bg-foam px-3.5 py-2.5 text-sm focus:border-ocean focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean/20 transition-all" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-1.5" for="regPassword">Mật
+            khẩu</label>
+          <input type="password" id="regPassword" required minlength="6" placeholder="Tối thiểu 6 ký tự"
+            class="w-full rounded-xl border border-mist bg-foam px-3.5 py-2.5 text-sm focus:border-ocean focus:bg-white focus:outline-none focus:ring-2 focus:ring-ocean/20 transition-all" />
+        </div>
+        <button type="submit" class="btn-primary w-full justify-center mt-2 py-2.5">
+          <i data-lucide="user-plus" class="h-4 w-4"></i> Tạo tài khoản
+        </button>
+        <p class="text-center text-xs text-slate-500 mt-3">Đã có tài khoản? <button type="button" id="switchToLogin"
+            class="text-ocean font-bold underline cursor-pointer">Đăng nhập</button></p>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="assets/js/menu-data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>

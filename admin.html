@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản trị | BlueIsland Coffee</title>
+  <meta name="description" content="Trang quản trị BlueIsland Coffee: doanh thu, đơn hàng, thực đơn, nhân viên, đánh giá và cài đặt." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0369A1" />
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+  <script>document.documentElement.classList.add('js');</script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Grandstander:wght@700;800&family=Patrick+Hand&family=Playfair+Display:ital,wght@1,500&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN) – cùng cấu hình với staff.html -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            deep: '#0C4A6E',
+            ocean: '#0369A1',
+            lagoon: '#06B6D4',
+            shallow: '#E0F2FE',
+            foam: '#F0F9FF',
+            ink: '#0F172A',
+            mist: '#E2E8F0',
+          },
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', '"Noto Sans"', 'sans-serif'],
+            accent: ['"Playfair Display"', 'serif'],
+            logo: ['"Grandstander"', '"Patrick Hand"', 'cursive'],
+          },
+          boxShadow: {
+            sea: '0 10px 30px -10px rgba(3,105,161,0.25)',
+            'sea-lg': '0 20px 45px -15px rgba(3,105,161,0.35)',
+          },
+          maxWidth: { container: '72rem' },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body class="bg-foam font-sans text-ink antialiased">
+
+  <!-- Banner chế độ xem trước (chỉ hiện khi ?preview=1 và USE_MOCK = true) -->
+  <div id="previewBanner" class="adm-preview-banner" role="status" hidden>
+    <i data-lucide="eye" class="h-4 w-4"></i> Chế độ xem trước – dữ liệu giả
+  </div>
+
+  <!-- Toàn bộ giao diện ẩn cho tới khi kiểm tra quyền xong -->
+  <div id="adminApp" hidden>
+
+    <!-- ===================== SIDEBAR ===================== -->
+    <aside id="sidebar" class="adm-sidebar" aria-label="Thanh điều hướng quản trị">
+      <div class="flex items-center justify-between gap-2 border-b border-mist px-4 py-3">
+        <a href="index.html" class="flex min-h-[44px] items-center gap-2" aria-label="BlueIsland – về trang chủ">
+          <img src="assets/images/logo.png" alt="" class="h-10 w-auto object-contain" />
+          <span class="inline-block origin-left scale-y-110 font-logo text-lg font-extrabold uppercase tracking-wider text-[#142274]">
+            BLUE <span class="text-[#E63946]">ISLAND</span></span>
+        </a>
+        <button type="button" id="sidebarClose" class="pos-icon-btn adm-menu-btn" aria-label="Đóng menu">
+          <i data-lucide="x" class="h-4 w-4"></i>
+        </button>
+      </div>
+
+      <nav class="flex-1 overflow-y-auto p-3" aria-label="Chức năng quản trị">
+        <p class="px-3 pb-2 pt-1 text-xs font-bold uppercase tracking-wider text-slate-500">Quản trị</p>
+        <ul class="space-y-1" id="sideNav">
+          <li><a href="#dashboard" class="adm-nav-link" data-view="dashboard"><i data-lucide="layout-dashboard" class="h-5 w-5"></i> Tổng quan</a></li>
+          <li><a href="#orders" class="adm-nav-link" data-view="orders"><i data-lucide="receipt" class="h-5 w-5"></i> Đơn hàng</a></li>
+          <li><a href="#menu" class="adm-nav-link" data-view="menu"><i data-lucide="coffee" class="h-5 w-5"></i> Thực đơn</a></li>
+          <li><a href="#staff" class="adm-nav-link" data-view="staff"><i data-lucide="users" class="h-5 w-5"></i> Nhân viên</a></li>
+          <li><a href="#reviews" class="adm-nav-link" data-view="reviews"><i data-lucide="star" class="h-5 w-5"></i> Đánh giá</a></li>
+          <li><a href="#settings" class="adm-nav-link" data-view="settings"><i data-lucide="settings" class="h-5 w-5"></i> Cài đặt</a></li>
+        </ul>
+      </nav>
+
+      <div class="border-t border-mist p-3">
+        <a href="staff.html" class="adm-nav-link"><i data-lucide="monitor" class="h-5 w-5"></i> Mở màn hình POS</a>
+      </div>
+    </aside>
+    <div id="sidebarOverlay" class="adm-overlay" aria-hidden="true"></div>
+
+    <!-- ===================== NỘI DUNG ===================== -->
+    <div class="adm-shell min-h-screen">
+      <header class="sticky top-0 z-40 border-b border-mist bg-white">
+        <div class="flex items-center justify-between gap-3 px-4 py-2 lg:px-6">
+          <div class="flex min-w-0 items-center gap-2">
+            <button type="button" id="sidebarOpen" class="pos-icon-btn adm-menu-btn" aria-label="Mở menu"
+              aria-controls="sidebar" aria-expanded="false">
+              <i data-lucide="menu" class="h-5 w-5"></i>
+            </button>
+            <p id="pageTitle" class="truncate text-lg font-extrabold text-deep">Tổng quan</p>
+          </div>
+
+          <div class="flex items-center gap-2 sm:gap-3">
+            <div class="hidden items-center gap-2 rounded-full bg-foam px-3 py-2 text-sm font-semibold text-deep tabular-nums sm:flex"
+              aria-label="Giờ hiện tại">
+              <i data-lucide="clock" class="h-4 w-4 text-ocean"></i>
+              <span id="clockText">--:--:--</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="adminAvatar" class="avatar !h-10 !w-10 text-sm" aria-hidden="true">AD</span>
+              <div class="hidden leading-tight md:block">
+                <p id="adminName" class="text-sm font-bold text-deep"></p>
+                <p class="text-xs text-slate-600">Quản trị viên</p>
+              </div>
+            </div>
+            <button type="button" id="logoutBtn" class="pos-btn-ghost" aria-label="Đăng xuất">
+              <i data-lucide="log-out" class="h-4 w-4"></i><span class="hidden sm:inline">Đăng xuất</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main id="main" class="mx-auto max-w-[1440px] px-4 py-6 lg:px-6" tabindex="-1">
+        <!-- Mỗi view là một section; admin.js bật/tắt theo hash. Nội dung chi tiết làm ở các giai đoạn sau. -->
+        <section id="view-dashboard" data-view-panel="dashboard" aria-labelledby="h-dashboard" hidden>
+          <h1 id="h-dashboard" class="text-2xl font-extrabold text-deep">Tổng quan</h1>
+          <div data-placeholder="Doanh thu, KPI, biểu đồ, top món (giai đoạn 4)"></div>
+        </section>
+        <section id="view-orders" data-view-panel="orders" aria-labelledby="h-orders" hidden>
+          <h1 id="h-orders" class="text-2xl font-extrabold text-deep">Đơn hàng</h1>
+          <div data-placeholder="Bảng đơn hàng, bộ lọc, chi tiết, huỷ đơn, xuất CSV (giai đoạn 5)"></div>
+        </section>
+        <section id="view-menu" data-view-panel="menu" aria-labelledby="h-menu" hidden>
+          <h1 id="h-menu" class="text-2xl font-extrabold text-deep">Thực đơn</h1>
+          <div data-placeholder="Danh sách món, thêm/sửa/xoá, topping & tuỳ chọn (giai đoạn 6)"></div>
+        </section>
+        <section id="view-staff" data-view-panel="staff" aria-labelledby="h-staff" hidden>
+          <h1 id="h-staff" class="text-2xl font-extrabold text-deep">Nhân viên</h1>
+          <div data-placeholder="Tài khoản nhân viên, đặt lại mật khẩu, lịch sử ca (giai đoạn 7)"></div>
+        </section>
+        <section id="view-reviews" data-view-panel="reviews" aria-labelledby="h-reviews" hidden>
+          <h1 id="h-reviews" class="text-2xl font-extrabold text-deep">Đánh giá</h1>
+          <div data-placeholder="Đánh giá của khách, lọc theo sao, ẩn/hiện (giai đoạn 8)"></div>
+        </section>
+        <section id="view-settings" data-view-panel="settings" aria-labelledby="h-settings" hidden>
+          <h1 id="h-settings" class="text-2xl font-extrabold text-deep">Cài đặt</h1>
+          <div data-placeholder="Thông tin quán, số bàn, ưu đãi SV, chuyển khoản (giai đoạn 8)"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== DIALOGS ===================== -->
+  <!-- Xác nhận dùng chung (thay cho confirm()) -->
+  <dialog id="confirmModal"
+    class="auth-modal w-[calc(100%-2rem)] max-w-md rounded-3xl bg-white p-0 shadow-sea-lg backdrop:bg-deep/70 backdrop:backdrop-blur-sm"
+    aria-labelledby="confirmTitle">
+    <form method="dialog" class="p-5 sm:p-6">
+      <h2 id="confirmTitle" class="text-lg font-extrabold text-deep"></h2>
+      <div id="confirmMessage" class="mt-2 text-sm text-slate-600"></div>
+      <div class="mt-6 flex flex-col-reverse gap-2 sm:flex-row">
+        <button type="submit" value="cancel" class="pos-btn-ghost flex-1 justify-center">Quay lại</button>
+        <button type="submit" value="ok" id="confirmOk" class="btn-primary flex-1 justify-center">Xác nhận</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Toast -->
+  <div id="toastRegion" class="pos-toast-region" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- Icons (pin version) -->
+  <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
+  <script src="assets/js/menu-data.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+
+</html>
