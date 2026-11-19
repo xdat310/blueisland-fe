@@ -296,78 +296,69 @@
       const loginPin = document.getElementById('loginPassword').value.trim();
       const upperCode = loginId.toUpperCase();
 
-      /* =========================================================================
-         KẾT NỐI BACKEND API:
-         Bỏ comment đoạn code dưới đây khi bạn chạy server Backend:
-         -------------------------------------------------------------------------
-         try {
-           const response = await fetch('/api/auth/login', {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json' },
-             body: JSON.stringify({ username: loginId, password: loginPin })
-           });
-           const data = await response.json();
-           if (!response.ok) {
-             throw new Error(data.message || 'Tài khoản hoặc mật khẩu không chính xác!');
-           }
+      // === KẾT NỐI BACKEND API ===
+      try {
+        const API = window.BI_API || {};
+        if (!API.auth) throw new Error('API chưa sẵn sàng');
 
-           // Admin dùng chung cổng đăng nhập; tài khoản admin do backend tạo riêng.
-           // Backend trả về role: 'admin' | 'staff' | 'customer'.
-           if (data.role === 'admin') {
-             const adminSession = {
-               code: data.staffProfile?.code || 'ADMIN',
-               name: data.staffProfile?.name || 'Quản trị viên',
-               role: 'admin',
-               token: data.token
-             };
-             localStorage.setItem('bi_pos_session', JSON.stringify(adminSession));
-             authModal.close();
-             formLogin.reset();
-             window.location.href = 'admin.html';
-             return;
-           }
+        const data = await API.auth.login(loginId, loginPin);
+        if (!data.access_token && !data.token) {
+          throw new Error(data.detail || 'Tài khoản hoặc mật khẩu không chính xác!');
+        }
 
-           if (data.isStaff) {
-             const staffSession = {
-               code: data.staffProfile.code,
-               name: data.staffProfile.name,
-               role: 'staff',
-               shift: data.staffProfile.shift || 'Toàn thời gian',
-               token: data.token,
-               startedAt: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
-             };
-             localStorage.setItem('bi_pos_session', JSON.stringify(staffSession));
-             setCurrentUser({
-               name: staffSession.name,
-               code: staffSession.code,
-               userRole: `Nhân viên (${staffSession.code})`,
-               email: data.staffProfile.email || `${staffSession.code.toLowerCase()}@blueisland.vn`,
-               isStaff: true
-             });
-             authModal.close();
-             formLogin.reset();
-             alert(`Xin chào ${staffSession.name}! Đang chuyển hướng đến màn hình nhân viên...`);
-             window.location.href = 'staff.html';
-             return;
-           }
+        if (data.role === 'admin') {
+          const adminSession = {
+            code: data.staffProfile?.code || 'ADMIN',
+            name: data.staffProfile?.name || 'Quản trị viên',
+            role: 'admin',
+            access_token: data.access_token || data.token
+          };
+          localStorage.setItem('bi_pos_session', JSON.stringify(adminSession));
+          authModal.close();
+          formLogin.reset();
+          window.location.href = 'admin.html';
+          return;
+        }
 
-           setCurrentUser(data.user);
-           authModal.close();
-           formLogin.reset();
-           alert(`Xin chào ${data.user.name}! Bạn đã đăng nhập thành công.`);
-           return;
-         } catch (err) {
-           if (loginErrorMsg) {
-             loginErrorMsg.textContent = err.message;
-             loginErrorMsg.classList.remove('hidden');
-           } else {
-             alert(err.message);
-           }
-           return;
-         }
-         ========================================================================= */
+        if (data.isStaff) {
+          const staffSession = {
+            code: data.staffProfile?.code || 'STAFF',
+            name: data.staffProfile?.name || 'Nhân viên',
+            role: 'staff',
+            shift: data.staffProfile?.shift || 'Toàn thời gian',
+            access_token: data.access_token || data.token,
+            startedAt: new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+          };
+          localStorage.setItem('bi_pos_session', JSON.stringify(staffSession));
+          setCurrentUser({
+            name: staffSession.name,
+            code: staffSession.code,
+            userRole: `Nhân viên (${staffSession.code})`,
+            email: data.staffProfile?.email || `${staffSession.code.toLowerCase()}@blueisland.vn`,
+            isStaff: true
+          });
+          authModal.close();
+          formLogin.reset();
+          alert(`Xin chào ${staffSession.name}! Đang chuyển hướng đến màn hình nhân viên...`);
+          window.location.href = 'staff.html';
+          return;
+        }
 
-      // Kiểm tra nếu đăng nhập bằng mã nhân viên hoặc ADMIN (khi chưa kết nối Backend)
+        setCurrentUser({ name: loginId, email: '', userRole: 'Khách hàng' });
+        authModal.close();
+        formLogin.reset();
+        alert('Bạn đã đăng nhập thành công.');
+        return;
+      } catch (err) {
+        if (loginErrorMsg) {
+          loginErrorMsg.textContent = err.message || 'Lỗi đăng nhập';
+          loginErrorMsg.classList.remove('hidden');
+        } else {
+          alert(err.message || 'Lỗi đăng nhập');
+        }
+      }
+
+      // Fallback: Kiểm tra nếu đăng nhập bằng mã nhân viên (khi backend không hoạt động)
       const isStaffFormat = upperCode.startsWith('NV') || upperCode === 'ADMIN';
 
       if (isStaffFormat) {
